@@ -172,10 +172,10 @@ async def scheduler():
     except Exception as err:
         logger.exception("Exception in scheduler in Main : %s"%err)
 
-# @app.on_event("startup")
-# async def start_scheduler():
-#     try:
-#         logger.info("Enter in start_scheduler in Main")
-#         asyncio.create_task(scheduler())
-#     except Exception as err:
-#         logger.exception("Exception in start_scheduler in Main : %s"%err)
+@app.on_event("startup")
+async def start_scheduler():
+    try:
+        logger.info("Enter in start_scheduler in Main")
+        asyncio.create_task(scheduler())
+    except Exception as err:
+        logger.exception("Exception in start_scheduler in Main : %s"%err)
