@@ -108,11 +108,7 @@ async def get_fund_details(scheme_code:int):
 async def invest(fund_details: FundDetailsModel, user=Depends(get_current_user)):
     try:
         logger.info("Enter in invest in Main")
-        print(">> invest user >>>>",type(user),user)
         existing_portfolio = await Database.get_collection("user_profile").find_one({"user": user},{"_id":0,"portfolio":1})
-        print(">> existing_portfolio >>>>",type(existing_portfolio),existing_portfolio)
-        print(">>> one >>>>",existing_portfolio.get("portfolio",{}).get(str(fund_details.scheme_code),{}).get("invested_amount",0))
-        print(">>> two >>>>",fund_details.amount)
         new_investment = existing_portfolio.get("portfolio",{}).get(str(fund_details.scheme_code),{}).get("invested_amount",0) + fund_details.amount
         await Database.get_collection("user_profile").update_one({"user": user},
             {"$set":{"portfolio.%s"%(fund_details.scheme_code): {"invested_amount": new_investment}}})
@@ -124,7 +120,6 @@ async def invest(fund_details: FundDetailsModel, user=Depends(get_current_user))
 async def get_portfolio(user=Depends(get_current_user)):
     try:
         logger.info("Enter in get_portfolio in Main")
-        print(">>> portfolio user >>>>",user)
         portfolio_details = await Database.get_collection("user_profile").find_one({"user":user},{"_id":0,"portfolio":1})
         portfolio = portfolio_details.get("portfolio",{})
         updated = []
